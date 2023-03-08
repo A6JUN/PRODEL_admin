@@ -60,14 +60,14 @@ class _HomescreenState extends State<Homescreen>
                 'PRODEL',
                 style: GoogleFonts.cambay(
                   textStyle: Theme.of(context).textTheme.labelLarge!.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 40),
                 ),
               ),
             ),
             const SizedBox(
-              height: 50,
+              height: 30,
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -85,7 +85,7 @@ class _HomescreenState extends State<Homescreen>
               ),
             ),
             const SizedBox(
-              height: 15,
+              height: 7,
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -103,7 +103,7 @@ class _HomescreenState extends State<Homescreen>
               ),
             ),
             const SizedBox(
-              height: 15,
+              height: 7,
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -121,7 +121,7 @@ class _HomescreenState extends State<Homescreen>
               ),
             ),
             const SizedBox(
-              height: 15,
+              height: 7,
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -139,7 +139,7 @@ class _HomescreenState extends State<Homescreen>
               ),
             ),
             const SizedBox(
-              height: 15,
+              height: 7,
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -157,7 +157,7 @@ class _HomescreenState extends State<Homescreen>
               ),
             ),
             const SizedBox(
-              height: 15,
+              height: 7,
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -175,7 +175,7 @@ class _HomescreenState extends State<Homescreen>
               ),
             ),
             const SizedBox(
-              height: 15,
+              height: 7,
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -193,7 +193,7 @@ class _HomescreenState extends State<Homescreen>
               ),
             ),
             const SizedBox(
-              height: 15,
+              height: 7,
             ),
             Padding(
               padding: const EdgeInsets.only(

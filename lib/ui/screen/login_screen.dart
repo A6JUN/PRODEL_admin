@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:prodel_admin/ui/screen/dashboard_screen.dart';
 import 'package:prodel_admin/ui/screen/home_screen.dart';
+import 'package:prodel_admin/ui/screen/widget/custom_button.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -62,22 +64,8 @@ class LoginScreen extends StatelessWidget {
                 height: 50,
               ),
               SizedBox(
-                width: 180,
-                child: TextField(
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Color.fromARGB(255, 228, 224, 224),
-                      hintText: "Login",
-                      hintStyle: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(60),
-                        borderSide: BorderSide.none,
-                      )),
+                width: 200,
+                child: CustomButton(
                   onTap: () {
                     Navigator.push(
                       context,
@@ -85,8 +73,35 @@ class LoginScreen extends StatelessWidget {
                           builder: (context) => const Homescreen()),
                     );
                   },
+                  label: 'Login',
                 ),
               ),
+              // SizedBox(
+              //   width: 180,
+              //   child: TextField(
+              //     textAlign: TextAlign.center,
+              //     decoration: InputDecoration(
+              //         filled: true,
+              //         fillColor: Color.fromARGB(255, 228, 224, 224),
+              //         hintText: "Login",
+              //         hintStyle: const TextStyle(
+              //           fontSize: 20,
+              //           fontWeight: FontWeight.w600,
+              //           color: Colors.black,
+              //         ),
+              //         border: OutlineInputBorder(
+              //           borderRadius: BorderRadius.circular(60),
+              //           borderSide: BorderSide.none,
+              //         )),
+              //     onTap: () {
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //             builder: (context) => const Homescreen()),
+              //       );
+              //     },
+              //   ),
+              // ),
               const SizedBox(
                 height: 30,
               ),
