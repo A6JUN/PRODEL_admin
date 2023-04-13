@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:prodel_admin/ui/screen/customers_screen.dart';
-import 'package:prodel_admin/ui/screen/dashboard_screen.dart';
-import 'package:prodel_admin/ui/screen/delivery_screen.dart';
-import 'package:prodel_admin/ui/screen/login_screen.dart';
-import 'package:prodel_admin/ui/screen/product_screen.dart';
-import 'package:prodel_admin/ui/screen/analytics_screen.dart';
-import 'package:prodel_admin/ui/screen/shops_screen.dart';
-import 'package:prodel_admin/ui/screen/message_screen.dart';
-import 'package:prodel_admin/ui/screen/settings_screen.dart';
+import 'package:prodel_admin/ui/screens/complaints_screen.dart';
+import 'package:prodel_admin/ui/screens/customers_screen.dart';
+import 'package:prodel_admin/ui/screens/dashboard_screen.dart';
+import 'package:prodel_admin/ui/screens/delivery_screen.dart';
+import 'package:prodel_admin/ui/screens/product_categories.dart';
+import 'package:prodel_admin/ui/screens/product_screen.dart';
+import 'package:prodel_admin/ui/screens/service_area_scree.dart';
+import 'package:prodel_admin/ui/screens/shops_screen.dart';
+import 'package:prodel_admin/ui/screens/suggestion_screen.dart';
+import 'package:prodel_admin/ui/widgets/custom_alert_dialog.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -23,7 +24,7 @@ class _HomescreenState extends State<Homescreen>
 
   @override
   void initState() {
-    controller = TabController(length: 8, vsync: this);
+    controller = TabController(length: 9, vsync: this);
     super.initState();
   }
 
@@ -40,13 +41,14 @@ class _HomescreenState extends State<Homescreen>
         controller: controller,
         children: const [
           DashboardScreen(),
-          CustomerScreen(),
           DeliveryScreen(),
+          CustomerScreen(),
           ShopsScreen(),
-          Analytics_screen(),
           ProductsScreen(),
-          MessageScreen(),
-          Settings(),
+          ProductCategoriesScreen(),
+          ServiceAreaScreen(),
+          SuggestionScreen(),
+          ComplaintsScreen(),
         ],
       ),
       drawer: Drawer(
@@ -55,26 +57,22 @@ class _HomescreenState extends State<Homescreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 10, top: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Text(
                 'PRODEL',
                 style: GoogleFonts.cambay(
-                  textStyle: Theme.of(context).textTheme.labelLarge!.copyWith(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 40),
+                  textStyle:
+                      Theme.of(context).textTheme.headlineMedium!.copyWith(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                          ),
                 ),
               ),
             ),
-            const SizedBox(
-              height: 30,
-            ),
             Padding(
-              padding: const EdgeInsets.only(
-                right: 20,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: DashboardItem(
-                icon: Icons.dashboard,
+                icon: Icons.dashboard_outlined,
                 label: 'Dashboard',
                 isSelected: controller!.index == 0,
                 onTap: () {
@@ -85,15 +83,13 @@ class _HomescreenState extends State<Homescreen>
               ),
             ),
             const SizedBox(
-              height: 7,
+              height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                right: 20,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: DashboardItem(
-                icon: Icons.account_circle,
-                label: 'Customers',
+                icon: Icons.local_shipping_outlined,
+                label: 'Orders',
                 isSelected: controller!.index == 1,
                 onTap: () {
                   controller!.animateTo(1);
@@ -103,15 +99,13 @@ class _HomescreenState extends State<Homescreen>
               ),
             ),
             const SizedBox(
-              height: 7,
+              height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                right: 20,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: DashboardItem(
-                icon: Icons.local_shipping,
-                label: 'Delivery &preorder',
+                icon: Icons.account_circle_outlined,
+                label: 'Customers',
                 isSelected: controller!.index == 2,
                 onTap: () {
                   controller!.animateTo(2);
@@ -121,15 +115,13 @@ class _HomescreenState extends State<Homescreen>
               ),
             ),
             const SizedBox(
-              height: 7,
+              height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                right: 20,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: DashboardItem(
-                icon: Icons.store,
-                label: 'shops',
+                icon: Icons.store_outlined,
+                label: 'Shops',
                 isSelected: controller!.index == 3,
                 onTap: () {
                   controller!.animateTo(3);
@@ -139,15 +131,13 @@ class _HomescreenState extends State<Homescreen>
               ),
             ),
             const SizedBox(
-              height: 7,
+              height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                right: 20,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: DashboardItem(
-                icon: Icons.auto_graph,
-                label: 'Analytics',
+                icon: Icons.shopping_bag_outlined,
+                label: 'Products',
                 isSelected: controller!.index == 4,
                 onTap: () {
                   controller!.animateTo(4);
@@ -157,15 +147,13 @@ class _HomescreenState extends State<Homescreen>
               ),
             ),
             const SizedBox(
-              height: 7,
+              height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                right: 20,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: DashboardItem(
-                icon: Icons.inventory,
-                label: 'Products',
+                icon: Icons.category_outlined,
+                label: 'Product Categories',
                 isSelected: controller!.index == 5,
                 onTap: () {
                   controller!.animateTo(5);
@@ -175,15 +163,13 @@ class _HomescreenState extends State<Homescreen>
               ),
             ),
             const SizedBox(
-              height: 7,
+              height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                right: 20,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: DashboardItem(
-                icon: Icons.mail,
-                label: 'Messages',
+                icon: Icons.place_outlined,
+                label: 'Service Area',
                 isSelected: controller!.index == 6,
                 onTap: () {
                   controller!.animateTo(6);
@@ -193,54 +179,55 @@ class _HomescreenState extends State<Homescreen>
               ),
             ),
             const SizedBox(
-              height: 7,
+              height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                right: 20,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: DashboardItem(
-                icon: Icons.logout,
-                label: 'Logout',
+                icon: Icons.comment_outlined,
+                label: 'Suggestions',
                 isSelected: controller!.index == 7,
                 onTap: () {
                   controller!.animateTo(7);
-                  setState(
-                    () {
-                      showDialog(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                                title: Column(
-                                  children: const [],
-                                ),
-                                content: const Text(
-                                  "Are you sure you want to Logout? ",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const LoginScreen()),
-                                      );
-                                    },
-                                    child: Container(
-                                      color: Colors.blue,
-                                      padding: const EdgeInsets.all(14),
-                                      child: const Text(
-                                        "Logout",
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ));
-                    },
+                  setState(() {});
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: DashboardItem(
+                icon: Icons.warning_amber_outlined,
+                label: 'Complaints',
+                isSelected: controller!.index == 8,
+                onTap: () {
+                  controller!.animateTo(8);
+                  setState(() {});
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: DashboardItem(
+                icon: Icons.exit_to_app_outlined,
+                label: 'Logout',
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => CustomAlertDialog(
+                      title: 'Are you sure ?',
+                      message: 'Are you sure that you want to logout ?',
+                      primaryButtonLabel: 'Logout',
+                      primaryOnPressed: () {},
+                      secondaryButtonLabel: 'Cancel',
+                    ),
                   );
                 },
               ),
@@ -267,37 +254,33 @@ class DashboardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Material(
-        color: isSelected ? const Color(0xFFB5B8FF) : Colors.transparent,
+    return Material(
+      borderRadius: BorderRadius.circular(20),
+      color: isSelected ? const Color(0xFFB5B8FF) : Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Container(
-              //   width: 10,
-              //   height: 10,
-              //   color: const Color(0xFF5B62FC),
-              // ),
               Icon(
                 icon,
                 color: Colors.black,
                 size: 30,
               ),
               const SizedBox(
-                width: 20,
+                width: 15,
               ),
               Text(
                 label,
                 style: GoogleFonts.cambay(
-                  textStyle:
-                      Theme.of(context).textTheme.headlineSmall!.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ),
             ],
