@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prodel_admin/blocs/product_category/product_category_bloc.dart';
 import 'package:prodel_admin/blocs/service_area/service_area_bloc.dart';
 
 import '../custom_button.dart';
 
-class AddServiceAreaDialog extends StatefulWidget {
-  const AddServiceAreaDialog({
+class AddProductCategoryDialog extends StatefulWidget {
+  const AddProductCategoryDialog({
     super.key,
   });
 
   @override
-  State<AddServiceAreaDialog> createState() => _AddServiceAreaDialogState();
+  State<AddProductCategoryDialog> createState() =>
+      _AddProductCategoryDialogState();
 }
 
-class _AddServiceAreaDialogState extends State<AddServiceAreaDialog> {
+class _AddProductCategoryDialogState extends State<AddProductCategoryDialog> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
 
@@ -47,7 +49,7 @@ class _AddServiceAreaDialogState extends State<AddServiceAreaDialog> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Add Service Area",
+                            "Add Product Category",
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge
@@ -58,7 +60,7 @@ class _AddServiceAreaDialogState extends State<AddServiceAreaDialog> {
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            "Enter the following details to add a service area.",
+                            "Enter the following details to add a product category.",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -84,7 +86,7 @@ class _AddServiceAreaDialogState extends State<AddServiceAreaDialog> {
                   height: 10,
                 ),
                 Text(
-                  'Service Area Name',
+                  'product Category Name',
                   style: Theme.of(context).textTheme.labelMedium?.copyWith(
                         color: Colors.black45,
                         fontWeight: FontWeight.bold,
@@ -97,11 +99,11 @@ class _AddServiceAreaDialogState extends State<AddServiceAreaDialog> {
                     if (value != null && value.trim().isNotEmpty) {
                       return null;
                     } else {
-                      return 'Please enter service area name';
+                      return 'Please enter product category name';
                     }
                   },
                   decoration: InputDecoration(
-                    hintText: 'eg.Some area',
+                    hintText: 'eg.Electronics',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide:
@@ -116,9 +118,9 @@ class _AddServiceAreaDialogState extends State<AddServiceAreaDialog> {
                   label: 'Add',
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      BlocProvider.of<ServiceAreaBloc>(context).add(
-                        AddServiceAreaEvent(
-                          areaName: _nameController.text.trim(),
+                      BlocProvider.of<ProductCategoryBloc>(context).add(
+                        AddProductCategoryEvent(
+                          productCategoryName: _nameController.text.trim(),
                         ),
                       );
                     }
