@@ -8,11 +8,11 @@ import 'custom_alert_dialog.dart';
 
 class ServiceAreaSelector extends StatefulWidget {
   final Function(int) onSelect;
-  final int selectedDepartment;
+  final int? selectedServiceArea;
   const ServiceAreaSelector({
     super.key,
     required this.onSelect,
-    this.selectedDepartment = 0,
+    this.selectedServiceArea,
   });
 
   @override
@@ -21,7 +21,7 @@ class ServiceAreaSelector extends StatefulWidget {
 
 class _ServiceAreaSelectorState extends State<ServiceAreaSelector> {
   final ServiceAreaBloc serviceAreaBloc = ServiceAreaBloc();
-
+  int? selectedId;
   @override
   void initState() {
     serviceAreaBloc.add(GetAllServiceAreaEvent());
@@ -30,65 +30,75 @@ class _ServiceAreaSelectorState extends State<ServiceAreaSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomCard(
-      child: BlocProvider<ServiceAreaBloc>.value(
-        value: serviceAreaBloc,
-        child: BlocConsumer<ServiceAreaBloc, ServiceAreaState>(
-          listener: (context, state) {
-            if (state is ServiceAreaFailureState) {
-              showDialog(
-                context: context,
-                builder: (context) => CustomAlertDialog(
-                  title: 'Failed!',
-                  message: state.message,
-                  primaryButtonLabel: 'Retry',
-                  primaryOnPressed: () {
-                    serviceAreaBloc.add(GetAllServiceAreaEvent());
-                    Navigator.pop(context);
-                  },
-                ),
-              );
-            }
-          },
-          builder: (context, state) {
-            if (state is ServiceAreaSuccessState) {
-              return DropdownMenu(
-                hintText: 'All Departments',
-                initialSelection: widget.selectedDepartment,
-                onSelected: (value) {
-                  widget.onSelect(value);
+    return BlocProvider<ServiceAreaBloc>.value(
+      value: serviceAreaBloc,
+      child: BlocConsumer<ServiceAreaBloc, ServiceAreaState>(
+        listener: (context, state) {
+          if (state is ServiceAreaFailureState) {
+            showDialog(
+              context: context,
+              builder: (context) => CustomAlertDialog(
+                title: 'Failed!',
+                message: state.message,
+                primaryButtonLabel: 'Retry',
+                primaryOnPressed: () {
+                  serviceAreaBloc.add(GetAllServiceAreaEvent());
+                  Navigator.pop(context);
                 },
-                inputDecorationTheme: InputDecorationTheme(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide.none,
-                  ),
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is ServiceAreaSuccessState) {
+            return Material(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: const BorderSide(
+                  color: Colors.grey,
                 ),
-                dropdownMenuEntries: [
-                  const DropdownMenuEntry(
-                    value: 0,
-                    label: 'All Departments',
-                  ),
-                  ...List<DropdownMenuEntry>.generate(
-                    state.serviceAreas.length,
-                    (index) => DropdownMenuEntry(
-                      value: state.serviceAreas[index]['id'],
-                      label: state.serviceAreas[index]['name'],
+              ),
+              child: DropdownButton(
+                borderRadius: BorderRadius.circular(20),
+                isExpanded: true,
+                underline: const SizedBox(),
+                hint: Text(
+                  'Select Service Area',
+                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                        color: Colors.black,
+                      ),
+                ),
+                value: selectedId ?? widget.selectedServiceArea,
+                onChanged: (value) {
+                  widget.onSelect(value);
+                  selectedId = value;
+                  setState(() {});
+                },
+                items: List<DropdownMenuItem>.generate(
+                  state.serviceAreas.length,
+                  (index) => DropdownMenuItem(
+                    value: state.serviceAreas[index]['id'],
+                    child: Text(
+                      state.serviceAreas[index]['name'],
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                            color: Colors.black,
+                          ),
                     ),
                   ),
-                ],
-              );
-            } else if (state is ServiceAreaFailureState) {
-              return const SizedBox();
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: primaryColor,
                 ),
-              );
-            }
-          },
-        ),
+              ),
+            );
+          } else if (state is ServiceAreaFailureState) {
+            return const SizedBox();
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
+            );
+          }
+        },
       ),
     );
   }

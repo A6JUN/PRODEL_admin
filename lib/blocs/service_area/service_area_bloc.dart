@@ -9,7 +9,7 @@ part 'service_area_state.dart';
 class ServiceAreaBloc extends Bloc<ServiceAreaEvent, ServiceAreaState> {
   ServiceAreaBloc() : super(ServiceAreaInitialState()) {
     on<ServiceAreaEvent>((event, emit) async {
-      emit(ServiceAreaLoadinState());
+      emit(ServiceAreaLoadingState());
       SupabaseClient supabaseClient = Supabase.instance.client;
       SupabaseQueryBuilder queryTable = supabaseClient.from('service_areas');
       try {

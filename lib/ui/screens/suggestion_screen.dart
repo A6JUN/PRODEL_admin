@@ -16,6 +16,9 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: 30,
+            ),
             Text(
               'Suggestions',
               style: Theme.of(context).textTheme.headlineMedium!.copyWith(

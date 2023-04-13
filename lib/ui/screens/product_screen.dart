@@ -19,6 +19,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: 30,
+            ),
             Text(
               'Products',
               style: Theme.of(context).textTheme.headlineMedium!.copyWith(

@@ -34,13 +34,13 @@ class _AddEditShopDialogState extends State<AddEditShopDialog> {
   @override
   void initState() {
     if (widget.shopDetails != null) {
-      _nameController.text = widget.shopDetails!['name'];
-      _addressController.text = widget.shopDetails!['address_line'];
-      _pinController.text = widget.shopDetails!['pin'];
-      _cityController.text = widget.shopDetails!['city'];
-      _placeController.text = widget.shopDetails!['place'];
-      serviceAreaId = widget.shopDetails!['service_area_id'];
-      _emailController.text = widget.shopDetails!['email'];
+      _nameController.text = widget.shopDetails!['shop']['name'];
+      _addressController.text = widget.shopDetails!['shop']['address_line'];
+      _pinController.text = widget.shopDetails!['shop']['pin'].toString();
+      _cityController.text = widget.shopDetails!['shop']['city'];
+      _placeController.text = widget.shopDetails!['shop']['place'];
+      serviceAreaId = widget.shopDetails!['shop']['service_area_id'];
+      _emailController.text = widget.shopDetails!['shop']['email'];
     }
     super.initState();
   }
@@ -381,6 +381,9 @@ class _AddEditShopDialogState extends State<AddEditShopDialog> {
                           ),
                           const SizedBox(height: 5),
                           ServiceAreaSelector(
+                            selectedServiceArea: widget.shopDetails != null
+                                ? serviceAreaId
+                                : null,
                             onSelect: (id) {
                               serviceAreaId = id;
                             },

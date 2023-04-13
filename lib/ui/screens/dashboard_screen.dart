@@ -16,6 +16,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: 30,
+            ),
             Row(
               children: [
                 Text(
@@ -87,6 +90,9 @@ class DashboardWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
+              const SizedBox(
+                height: 40,
+              ),
               Row(
                 children: [
                   Icon(

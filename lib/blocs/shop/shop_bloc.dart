@@ -13,7 +13,9 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
       emit(ShopLoadingState());
       SupabaseClient supabaseClient = Supabase.instance.client;
       SupabaseQueryBuilder queryTable = supabaseClient.from('shops');
-
+      SupabaseQueryBuilder subQueryTable = supabaseClient.from('service_areas');
+      List<Map<String, dynamic>> shopWithServiceAreaList = [];
+      Map<String, dynamic> shopWithAreaMap = {};
       try {
         if (event is GetAllShopEvent) {
           List<dynamic> temp = event.query != null
@@ -39,7 +41,19 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
             return element;
           }).toList();
 
-          emit(ShopSuccessState(shops: shops));
+          for (Map<String, dynamic> shop in shops) {
+            Map<String, dynamic> area = await subQueryTable
+                .select()
+                .eq('id', shop['service_area_id'])
+                .single();
+            shopWithAreaMap = {'shop': shop, 'area': area};
+
+            shopWithServiceAreaList.add(shopWithAreaMap);
+          }
+
+          emit(ShopSuccessState(
+            shops: shopWithServiceAreaList,
+          ));
         } else if (event is AddShopEvent) {
           UserResponse userDetails = await supabaseClient.auth.admin.createUser(
             AdminUserAttributes(

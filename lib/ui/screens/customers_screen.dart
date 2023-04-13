@@ -11,55 +11,67 @@ class CustomerScreen extends StatefulWidget {
 class _CustomerScreenState extends State<CustomerScreen> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 20),
-          child: Text(
-            'Customers',
-            style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
-          ),
-        ),
-        const Divider(
-          thickness: 1,
-          color: Color.fromARGB(255, 165, 163, 163),
-          height: 50,
-        ),
-        Expanded(
-          child: DataTable2(
-            columns: const [
-              DataColumn2(
-                label: Text(
-                  "ID",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
-                ),
-              ),
-              DataColumn2(
-                label: Text(
-                  "Name",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
-                ),
-              ),
-            ],
-            rows: List<DataRow>.generate(
-              10,
-              (index) => DataRow(cells: [
-                DataCell(
-                  Text(
-                    index.toString(),
-                  ),
-                ),
-                const DataCell(
-                  Text(
-                    "Item",
-                  ),
-                ),
-              ]),
+    return Center(
+      child: SizedBox(
+        width: 1000,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 30,
             ),
-          ),
+            Text(
+              'Customers',
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                  ),
+            ),
+            const Divider(
+              thickness: 1,
+              color: Color.fromARGB(255, 165, 163, 163),
+              height: 30,
+            ),
+            Expanded(
+              child: DataTable2(
+                columns: const [
+                  DataColumn2(
+                    label: Text(
+                      "ID",
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  DataColumn2(
+                    label: Text(
+                      "Name",
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ],
+                rows: List<DataRow>.generate(
+                  10,
+                  (index) => DataRow(
+                    cells: [
+                      DataCell(
+                        Text(
+                          index.toString(),
+                        ),
+                      ),
+                      const DataCell(
+                        Text(
+                          "Item",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

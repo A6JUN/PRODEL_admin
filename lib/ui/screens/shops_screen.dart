@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prodel_admin/blocs/shop/shop_bloc.dart';
 import 'package:prodel_admin/ui/widgets/custom_action_button.dart';
+import 'package:prodel_admin/ui/widgets/custom_alert_dialog.dart';
 import 'package:prodel_admin/ui/widgets/custom_icon_button.dart';
 import 'package:prodel_admin/ui/widgets/custom_search.dart';
 import 'package:prodel_admin/ui/widgets/shops/add_edit_shop_dialog.dart';
@@ -33,12 +34,24 @@ class _ShopsScreenState extends State<ShopsScreen> {
           width: 1000,
           child: BlocConsumer<ShopBloc, ShopState>(
             listener: (context, state) {
-              // TODO: implement listener
+              if (state is ShopFailureState) {
+                showDialog(
+                  context: context,
+                  builder: (_) => CustomAlertDialog(
+                    message: state.message,
+                    title: 'Failure',
+                    primaryButtonLabel: 'Ok',
+                  ),
+                );
+              }
             },
             builder: (context, state) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(
+                    height: 30,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -73,7 +86,11 @@ class _ShopsScreenState extends State<ShopsScreen> {
                   ),
                   CustomSearch(
                     onSearch: (search) {
-                      shopBloc.add(GetAllShopEvent());
+                      shopBloc.add(
+                        GetAllShopEvent(
+                          query: search,
+                        ),
+                      );
                     },
                   ),
                   const SizedBox(
@@ -182,29 +199,30 @@ class _ShopsScreenState extends State<ShopsScreen> {
                                         cells: [
                                           DataCell(
                                             Text(
-                                              state.shops[index]['id'],
-                                            ),
-                                          ),
-                                          DataCell(
-                                            Text(
-                                              state.shops[index]['name'],
-                                            ),
-                                          ),
-                                          DataCell(
-                                            Text(
-                                              '${state.shops[index]['address_line']}, ${state.shops[index]['place']}, ${state.shops[index]['city']}',
-                                            ),
-                                          ),
-                                          DataCell(
-                                            Text(
-                                              state.shops[index]
-                                                      ['service_area_id']
+                                              state.shops[index]['shop']['id']
                                                   .toString(),
                                             ),
                                           ),
                                           DataCell(
                                             Text(
-                                              state.shops[index]['pin']
+                                              state.shops[index]['shop']
+                                                  ['name'],
+                                            ),
+                                          ),
+                                          DataCell(
+                                            Text(
+                                              '${state.shops[index]['shop']['address_line']}, ${state.shops[index]['shop']['place']}, ${state.shops[index]['shop']['city']}',
+                                            ),
+                                          ),
+                                          DataCell(
+                                            Text(
+                                              state.shops[index]['area']['name']
+                                                  .toString(),
+                                            ),
+                                          ),
+                                          DataCell(
+                                            Text(
+                                              state.shops[index]['shop']['pin']
                                                   .toString(),
                                             ),
                                           ),
@@ -236,9 +254,10 @@ class _ShopsScreenState extends State<ShopsScreen> {
                                                   onPressed: () {
                                                     shopBloc.add(
                                                       DeleteShopEvent(
-                                                          userId:
-                                                              state.shops[index]
-                                                                  ['user_id']),
+                                                        userId: state
+                                                                .shops[index]
+                                                            ['shop']['user_id'],
+                                                      ),
                                                     );
                                                   },
                                                   color: Colors.red,
@@ -249,6 +268,7 @@ class _ShopsScreenState extends State<ShopsScreen> {
                                                   mainAxisSize:
                                                       MainAxisSize.min,
                                                   label: state.shops[index]
+                                                                  ['shop']
                                                               ['status'] ==
                                                           'active'
                                                       ? 'Block'
@@ -256,11 +276,12 @@ class _ShopsScreenState extends State<ShopsScreen> {
                                                   onPressed: () {
                                                     shopBloc.add(
                                                       ChangeShopStatusEvent(
-                                                        userId:
-                                                            state.shops[index]
-                                                                ['user_id'],
-                                                        status: state.shops[
-                                                                        index][
+                                                        userId: state
+                                                                .shops[index]
+                                                            ['shop']['user_id'],
+                                                        status: state.shops[index]
+                                                                        ['shop']
+                                                                    [
                                                                     'status'] ==
                                                                 'active'
                                                             ? 'blocked'
@@ -269,6 +290,7 @@ class _ShopsScreenState extends State<ShopsScreen> {
                                                     );
                                                   },
                                                   color: state.shops[index]
+                                                                  ['shop']
                                                               ['status'] ==
                                                           'active'
                                                       ? Colors.red
@@ -287,9 +309,12 @@ class _ShopsScreenState extends State<ShopsScreen> {
                             : state is ShopFailureState
                                 ? Center(
                                     child: CustomActionButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        shopBloc.add(GetAllShopEvent());
+                                      },
                                       label: 'Retry',
                                       iconData: Icons.refresh_outlined,
+                                      mainAxisSize: MainAxisSize.min,
                                     ),
                                   )
                                 : const SizedBox(),

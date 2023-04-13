@@ -5,7 +5,7 @@ abstract class ServiceAreaState {}
 
 class ServiceAreaInitialState extends ServiceAreaState {}
 
-class ServiceAreaLoadinState extends ServiceAreaState {}
+class ServiceAreaLoadingState extends ServiceAreaState {}
 
 class ServiceAreaSuccessState extends ServiceAreaState {
   final List<Map<String, dynamic>> serviceAreas;

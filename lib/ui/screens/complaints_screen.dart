@@ -16,6 +16,9 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: 30,
+            ),
             Text(
               'Complaints',
               style: Theme.of(context).textTheme.headlineMedium!.copyWith(

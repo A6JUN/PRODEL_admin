@@ -6,10 +6,11 @@ import 'package:prodel_admin/ui/screens/dashboard_screen.dart';
 import 'package:prodel_admin/ui/screens/delivery_screen.dart';
 import 'package:prodel_admin/ui/screens/product_categories.dart';
 import 'package:prodel_admin/ui/screens/product_screen.dart';
-import 'package:prodel_admin/ui/screens/service_area_scree.dart';
+import 'package:prodel_admin/ui/screens/service_area_screen.dart';
 import 'package:prodel_admin/ui/screens/shops_screen.dart';
 import 'package:prodel_admin/ui/screens/suggestion_screen.dart';
 import 'package:prodel_admin/ui/widgets/custom_alert_dialog.dart';
+import 'package:prodel_admin/values/colors.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -32,11 +33,20 @@ class _HomescreenState extends State<Homescreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: primaryColor.withOpacity(0.1),
         elevation: 0,
-        iconTheme: const IconThemeData(color: Color(0xFF9080F3)),
+        iconTheme: const IconThemeData(color: primaryColor),
+        centerTitle: true,
+        title: Text(
+          'PRODEL',
+          style: GoogleFonts.cambay(
+            textStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+          ),
+        ),
       ),
-      backgroundColor: Colors.white,
       body: TabBarView(
         controller: controller,
         children: const [
