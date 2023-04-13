@@ -4,6 +4,7 @@ import 'package:prodel_admin/ui/screens/complaints_screen.dart';
 import 'package:prodel_admin/ui/screens/customers_screen.dart';
 import 'package:prodel_admin/ui/screens/dashboard_screen.dart';
 import 'package:prodel_admin/ui/screens/delivery_screen.dart';
+import 'package:prodel_admin/ui/screens/login_screen.dart';
 import 'package:prodel_admin/ui/screens/product_categories.dart';
 import 'package:prodel_admin/ui/screens/product_screen.dart';
 import 'package:prodel_admin/ui/screens/service_area_screen.dart';
@@ -11,6 +12,7 @@ import 'package:prodel_admin/ui/screens/shops_screen.dart';
 import 'package:prodel_admin/ui/screens/suggestion_screen.dart';
 import 'package:prodel_admin/ui/widgets/custom_alert_dialog.dart';
 import 'package:prodel_admin/values/colors.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -235,7 +237,16 @@ class _HomescreenState extends State<Homescreen>
                       title: 'Are you sure ?',
                       message: 'Are you sure that you want to logout ?',
                       primaryButtonLabel: 'Logout',
-                      primaryOnPressed: () {},
+                      primaryOnPressed: () async {
+                        await Supabase.instance.client.auth.signOut();
+
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
+                          (route) => true,
+                        );
+                      },
                       secondaryButtonLabel: 'Cancel',
                     ),
                   );
