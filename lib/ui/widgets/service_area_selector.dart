@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prodel_admin/blocs/service_area/service_area_bloc.dart';
-import 'package:prodel_admin/ui/widgets/custom_card.dart';
 import 'package:prodel_admin/values/colors.dart';
 
 import 'custom_alert_dialog.dart';

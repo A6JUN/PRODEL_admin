@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:prodel_admin/ui/widgets/custom_action_button.dart';
 import 'package:prodel_admin/values/colors.dart';
 
-import 'custom_button.dart';
-
 class CustomAlertDialog extends StatelessWidget {
   final String title, message;
   final Widget? content;

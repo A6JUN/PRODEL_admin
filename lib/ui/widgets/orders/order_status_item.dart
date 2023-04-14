@@ -48,7 +48,7 @@ class OrderStatusItem extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 15,
-            vertical: 10,
+            vertical: 8,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

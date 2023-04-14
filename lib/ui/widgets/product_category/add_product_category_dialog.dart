@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prodel_admin/blocs/product_category/product_category_bloc.dart';
-import 'package:prodel_admin/blocs/service_area/service_area_bloc.dart';
 
 import '../custom_button.dart';
 

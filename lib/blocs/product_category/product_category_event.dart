@@ -17,6 +17,10 @@ class DeleteProductCategoryEvent extends ProductCategoryEvent {
 
 class GetAllProductCategoryEvent extends ProductCategoryEvent {
   final String? query;
+  final int? id;
 
-  GetAllProductCategoryEvent({this.query});
+  GetAllProductCategoryEvent({
+    this.query,
+    this.id,
+  });
 }

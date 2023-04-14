@@ -1,7 +1,15 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:prodel_admin/blocs/product/product_bloc.dart';
+import 'package:prodel_admin/ui/widgets/category_selector.dart';
 import 'package:prodel_admin/ui/widgets/custom_action_button.dart';
+import 'package:prodel_admin/ui/widgets/custom_alert_dialog.dart';
 import 'package:prodel_admin/ui/widgets/custom_search.dart';
+import 'package:prodel_admin/ui/widgets/product/show_images_dialog.dart';
+import 'package:prodel_admin/ui/widgets/product/show_shop_dialog.dart';
+import 'package:prodel_admin/ui/widgets/shop_selector.dart';
+import 'package:prodel_admin/values/colors.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -11,203 +19,384 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
+  ProductBloc productBloc = ProductBloc();
+  int? categoryId;
+
+  @override
+  void initState() {
+    productBloc.add(GetAllProductsEvent());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: 1000,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
-            Text(
-              'Products',
-              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
+    return BlocProvider<ProductBloc>.value(
+      value: productBloc,
+      child: Center(
+        child: SizedBox(
+          width: 1000,
+          child: BlocConsumer<ProductBloc, ProductState>(
+            listener: (context, state) {
+              if (state is ProductFailureState) {
+                showDialog(
+                  context: context,
+                  builder: (_) => CustomAlertDialog(
+                    message: state.message,
+                    title: 'Failure',
+                    primaryButtonLabel: 'Ok',
                   ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            CustomSearch(
-              onSearch: (search) {},
-            ),
-            const Divider(
-              thickness: 1,
-              color: Color.fromARGB(255, 165, 163, 163),
-              height: 50,
-            ),
-            Expanded(
-              child: DataTable2(
-                columnSpacing: 12,
-                horizontalMargin: 12,
-                columns: [
-                  DataColumn2(
-                    size: ColumnSize.S,
-                    label: Text(
-                      "#ID",
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
+                );
+              }
+            },
+            builder: (context, state) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Text(
+                    'Products',
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  IntrinsicHeight(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: CustomSearch(
+                            onSearch: (search) {
+                              productBloc.add(GetAllProductsEvent(
+                                query: search,
+                              ));
+                            },
                           ),
+                        ),
+                        const VerticalDivider(),
+                        CategorySelector(
+                          onSelect: (id) {
+                            productBloc.add(
+                              GetAllProductsEvent(
+                                categoryId: id == 0 ? null : id,
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        ShopSelector(
+                          onSelect: (id) {
+                            productBloc.add(
+                              GetAllProductsEvent(
+                                shopId: id == 0 ? null : id,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
-                  DataColumn2(
-                    size: ColumnSize.M,
-                    label: Text(
-                      "Name",
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
+                  const Divider(
+                    thickness: 1,
+                    color: Color.fromARGB(255, 165, 163, 163),
+                    height: 30,
                   ),
-                  DataColumn2(
-                    size: ColumnSize.M,
-                    label: Text(
-                      "Description",
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
+                  state is ProductLoadingState
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: primaryColor,
                           ),
-                    ),
-                  ),
-                  DataColumn2(
-                    size: ColumnSize.S,
-                    label: Text(
-                      "Category",
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                  ),
-                  DataColumn2(
-                    size: ColumnSize.S,
-                    label: Text(
-                      "Price",
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                  ),
-                  DataColumn2(
-                    size: ColumnSize.S,
-                    label: Text(
-                      "Disc.Price",
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                  ),
-                  DataColumn2(
-                    size: ColumnSize.S,
-                    label: Text(
-                      "Measure.",
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                  ),
-                  DataColumn2(
-                    size: ColumnSize.S,
-                    label: Text(
-                      "Qty",
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                  ),
-                  DataColumn2(
-                    size: ColumnSize.L,
-                    label: Text(
-                      "Actions",
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                  ),
+                        )
+                      : state is ProductSuccessState
+                          ? state.products.isNotEmpty
+                              ? Expanded(
+                                  child: DataTable2(
+                                    columnSpacing: 10,
+                                    horizontalMargin: 10,
+                                    dataRowHeight: 90,
+                                    columns: [
+                                      DataColumn2(
+                                        size: ColumnSize.S,
+                                        label: Text(
+                                          "#ID",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ),
+                                      DataColumn2(
+                                        size: ColumnSize.L,
+                                        label: Text(
+                                          "Name",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ),
+                                      DataColumn2(
+                                        size: ColumnSize.L,
+                                        label: Text(
+                                          "Description",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ),
+                                      DataColumn2(
+                                        size: ColumnSize.S,
+                                        label: Text(
+                                          "Category",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ),
+                                      DataColumn2(
+                                        size: ColumnSize.S,
+                                        label: Text(
+                                          "Price",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ),
+                                      DataColumn2(
+                                        size: ColumnSize.S,
+                                        label: Text(
+                                          "Disc.Price",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ),
+                                      DataColumn2(
+                                        size: ColumnSize.S,
+                                        label: Text(
+                                          "Measure.",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ),
+                                      DataColumn2(
+                                        size: ColumnSize.S,
+                                        label: Text(
+                                          "Qty",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ),
+                                      DataColumn2(
+                                        size: ColumnSize.L,
+                                        label: Text(
+                                          "Actions",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                    rows: List<DataRow>.generate(
+                                      state.products.length,
+                                      (index) => DataRow(
+                                        cells: [
+                                          DataCell(
+                                            Text(
+                                              state.products[index]['product']
+                                                      ['id']
+                                                  .toString(),
+                                            ),
+                                          ),
+                                          DataCell(
+                                            Text(
+                                              state.products[index]['product']
+                                                  ['name'],
+                                            ),
+                                          ),
+                                          DataCell(
+                                            Text(
+                                              state.products[index]['product']
+                                                  ['description'],
+                                            ),
+                                          ),
+                                          DataCell(
+                                            Text(
+                                              state.products[index]['product']
+                                                  ['category'],
+                                            ),
+                                          ),
+                                          DataCell(
+                                            Text(
+                                              '₹${state.products[index]['product']['price'].toString()}',
+                                            ),
+                                          ),
+                                          DataCell(
+                                            Text(
+                                              '₹${state.products[index]['product']['discounted_price'].toString()}',
+                                            ),
+                                          ),
+                                          DataCell(
+                                            Text(
+                                              state.products[index]['product']
+                                                  ['measurement'],
+                                            ),
+                                          ),
+                                          DataCell(
+                                            Text(
+                                              state.products[index]['product']
+                                                  ['quantity'],
+                                            ),
+                                          ),
+                                          DataCell(
+                                            Wrap(
+                                              spacing: 10,
+                                              runSpacing: 10,
+                                              children: [
+                                                CustomActionButton(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  label: 'Shop',
+                                                  onPressed: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          ShowShopDialog(
+                                                        shopDetails: state
+                                                                .products[index]
+                                                            ['shop'],
+                                                      ),
+                                                    );
+                                                  },
+                                                  color: Colors.purple,
+                                                ),
+                                                CustomActionButton(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  label: 'Images',
+                                                  onPressed: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          ShowImagesDialog(
+                                                        images: state
+                                                                .products[index]
+                                                            ['images'],
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                                CustomActionButton(
+                                                  iconData: state.products[
+                                                                      index]
+                                                                  ['product']
+                                                              ['status'] ==
+                                                          'active'
+                                                      ? Icons.block_outlined
+                                                      : Icons.done_sharp,
+                                                  onPressed: () {
+                                                    productBloc.add(
+                                                      ChangeProductStatusEvent(
+                                                        productId: state
+                                                                .products[index]
+                                                            ['product']['id'],
+                                                        status: state.products[
+                                                                            index]
+                                                                        [
+                                                                        'product']
+                                                                    [
+                                                                    'status'] ==
+                                                                'active'
+                                                            ? 'ban'
+                                                            : 'active',
+                                                      ),
+                                                    );
+                                                  },
+                                                  color: state.products[index]
+                                                                  ['product']
+                                                              ['status'] ==
+                                                          'active'
+                                                      ? Colors.red
+                                                      : Colors.green,
+                                                  label: state.products[index]
+                                                                  ['product']
+                                                              ['status'] ==
+                                                          'active'
+                                                      ? 'Ban'
+                                                      : 'Activate',
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : const Center(child: Text('No products found !'))
+                          : state is ProductFailureState
+                              ? Center(
+                                  child: CustomActionButton(
+                                    onPressed: () {
+                                      productBloc.add(GetAllProductsEvent());
+                                    },
+                                    label: 'Retry',
+                                    iconData: Icons.refresh_outlined,
+                                    mainAxisSize: MainAxisSize.min,
+                                  ),
+                                )
+                              : const SizedBox(),
+                  const SizedBox(
+                    height: 40,
+                  )
                 ],
-                rows: List<DataRow>.generate(
-                  20,
-                  (index) => DataRow(
-                    cells: [
-                      DataCell(
-                        Text(
-                          index.toString(),
-                        ),
-                      ),
-                      const DataCell(
-                        Text(
-                          "Some product",
-                        ),
-                      ),
-                      const DataCell(
-                        Text(
-                          "Product descrption ddfhdfkjdfdsg",
-                        ),
-                      ),
-                      const DataCell(
-                        Text(
-                          "Electronics",
-                        ),
-                      ),
-                      const DataCell(
-                        Text(
-                          "₹20000",
-                        ),
-                      ),
-                      const DataCell(
-                        Text(
-                          "₹10000",
-                        ),
-                      ),
-                      const DataCell(
-                        Text(
-                          "KG",
-                        ),
-                      ),
-                      const DataCell(
-                        Text(
-                          "10",
-                        ),
-                      ),
-                      DataCell(
-                        Wrap(
-                          spacing: 10,
-                          children: [
-                            CustomActionButton(
-                              mainAxisSize: MainAxisSize.min,
-                              label: 'Images',
-                              onPressed: () {},
-                            ),
-                            CustomActionButton(
-                              mainAxisSize: MainAxisSize.min,
-                              label: 'Ban',
-                              onPressed: () {},
-                              color: Colors.red,
-                              iconData: Icons.block_flipped,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 40,
-            )
-          ],
+              );
+            },
+          ),
         ),
       ),
     );
