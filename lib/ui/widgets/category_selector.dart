@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prodel_admin/blocs/product_category/product_category_bloc.dart';
-import 'package:prodel_admin/blocs/service_area/service_area_bloc.dart';
 import 'package:prodel_admin/ui/widgets/custom_card.dart';
 import 'package:prodel_admin/values/colors.dart';
 
@@ -79,7 +78,7 @@ class _CategorySelectorState extends State<CategorySelector> {
                 ],
               ),
             );
-          } else if (state is ServiceAreaFailureState) {
+          } else if (state is ProductCategoryFailureState) {
             return const SizedBox();
           } else {
             return const Center(

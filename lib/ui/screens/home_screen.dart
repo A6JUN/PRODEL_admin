@@ -27,6 +27,22 @@ class _HomescreenState extends State<Homescreen>
 
   @override
   void initState() {
+    Future.delayed(
+      const Duration(
+        milliseconds: 100,
+      ),
+      () {
+        if (Supabase.instance.client.auth.currentUser == null) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ),
+            (route) => true,
+          );
+        }
+      },
+    );
+
     controller = TabController(length: 9, vsync: this);
     super.initState();
   }
@@ -35,12 +51,12 @@ class _HomescreenState extends State<Homescreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primaryColor.withOpacity(0.1),
-        elevation: 0,
+        backgroundColor: Colors.white,
+        elevation: 1,
         iconTheme: const IconThemeData(color: primaryColor),
         centerTitle: true,
         title: Text(
-          'PRODEL',
+          'PRODEL ADMIN',
           style: GoogleFonts.cambay(
             textStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(
                   color: Colors.black,

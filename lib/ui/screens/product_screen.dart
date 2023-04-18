@@ -2,11 +2,11 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prodel_admin/blocs/product/product_bloc.dart';
+import 'package:prodel_admin/ui/screens/product_images.dart';
 import 'package:prodel_admin/ui/widgets/category_selector.dart';
 import 'package:prodel_admin/ui/widgets/custom_action_button.dart';
 import 'package:prodel_admin/ui/widgets/custom_alert_dialog.dart';
 import 'package:prodel_admin/ui/widgets/custom_search.dart';
-import 'package:prodel_admin/ui/widgets/product/show_images_dialog.dart';
 import 'package:prodel_admin/ui/widgets/product/show_shop_dialog.dart';
 import 'package:prodel_admin/ui/widgets/shop_selector.dart';
 import 'package:prodel_admin/values/colors.dart';
@@ -247,49 +247,46 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                         cells: [
                                           DataCell(
                                             Text(
-                                              state.products[index]['product']
-                                                      ['id']
+                                              state.products[index]['id']
                                                   .toString(),
                                             ),
                                           ),
                                           DataCell(
                                             Text(
-                                              state.products[index]['product']
-                                                  ['name'],
+                                              state.products[index]['name'],
                                             ),
                                           ),
                                           DataCell(
                                             Text(
-                                              state.products[index]['product']
+                                              state.products[index]
                                                   ['description'],
                                             ),
                                           ),
                                           DataCell(
                                             Text(
-                                              state.products[index]['product']
-                                                  ['category'],
+                                              state.products[index]['category']
+                                                  ['name'],
                                             ),
                                           ),
                                           DataCell(
                                             Text(
-                                              '₹${state.products[index]['product']['price'].toString()}',
+                                              '₹${state.products[index]['price'].toString()}',
                                             ),
                                           ),
                                           DataCell(
                                             Text(
-                                              '₹${state.products[index]['product']['discounted_price'].toString()}',
+                                              '₹${state.products[index]['discounted_price'].toString()}',
                                             ),
                                           ),
                                           DataCell(
                                             Text(
-                                              state.products[index]['product']
+                                              state.products[index]
                                                   ['measurement'],
                                             ),
                                           ),
                                           DataCell(
                                             Text(
-                                              state.products[index]['product']
-                                                  ['quantity'],
+                                              state.products[index]['quantity'],
                                             ),
                                           ),
                                           DataCell(
@@ -319,36 +316,33 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                                       MainAxisSize.min,
                                                   label: 'Images',
                                                   onPressed: () {
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (context) =>
-                                                          ShowImagesDialog(
-                                                        images: state
-                                                                .products[index]
-                                                            ['images'],
+                                                    Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ProductImagesScreen(
+                                                          images: state
+                                                                  .products[
+                                                              index]['images'],
+                                                        ),
                                                       ),
                                                     );
                                                   },
                                                 ),
                                                 CustomActionButton(
-                                                  iconData: state.products[
-                                                                      index]
-                                                                  ['product']
-                                                              ['status'] ==
-                                                          'active'
-                                                      ? Icons.block_outlined
-                                                      : Icons.done_sharp,
+                                                  iconData:
+                                                      state.products[index]
+                                                                  ['status'] ==
+                                                              'active'
+                                                          ? Icons.block_outlined
+                                                          : Icons.done_sharp,
                                                   onPressed: () {
                                                     productBloc.add(
                                                       ChangeProductStatusEvent(
                                                         productId: state
                                                                 .products[index]
-                                                            ['product']['id'],
+                                                            ['id'],
                                                         status: state.products[
-                                                                            index]
-                                                                        [
-                                                                        'product']
-                                                                    [
+                                                                        index][
                                                                     'status'] ==
                                                                 'active'
                                                             ? 'ban'
@@ -357,13 +351,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                                     );
                                                   },
                                                   color: state.products[index]
-                                                                  ['product']
                                                               ['status'] ==
                                                           'active'
                                                       ? Colors.red
                                                       : Colors.green,
                                                   label: state.products[index]
-                                                                  ['product']
                                                               ['status'] ==
                                                           'active'
                                                       ? 'Ban'

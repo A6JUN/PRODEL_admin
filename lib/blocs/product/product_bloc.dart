@@ -12,69 +12,34 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       emit(ProductLoadingState());
       SupabaseClient supabaseClient = Supabase.instance.client;
       SupabaseQueryBuilder queryTable = supabaseClient.from('products');
-      SupabaseQueryBuilder subQueryTable = supabaseClient.from('shops');
-      SupabaseQueryBuilder thirdQueryTable =
-          supabaseClient.from('product_images');
-      SupabaseQueryBuilder fourthQueryTable =
-          supabaseClient.from('service_areas');
-      SupabaseQueryBuilder fifthQueryTable =
-          supabaseClient.from('product_categories');
-
-      List<Map<String, dynamic>> products = [];
-      List<Map<String, dynamic>> imageList = [];
       try {
         if (event is GetAllProductsEvent) {
-          List<dynamic> temp = event.query != null
-              ? await queryTable
-                  .select()
-                  .ilike('name', '%${event.query}%')
-                  .ilike('category_id', '%${event.categoryId}%')
-                  .ilike('shop_id', '%${event.shopId}%')
-                  .order("name", ascending: true)
-              : await queryTable.select().order('id', ascending: false);
+          List<dynamic> temp = (await supabaseClient.rpc(
+                'get_products',
+                params: {
+                  'search_category_id': event.categoryId,
+                  'search_query': event.query,
+                },
+              )) ??
+              [];
 
-          List<Map<String, dynamic>> productsTemp =
-              temp.map((e) => e as Map<String, dynamic>).toList();
+          List<Map<String, dynamic>> products = temp.map((e) {
+            Map<String, dynamic> product = e as Map<String, dynamic>;
+            List<dynamic> tempImages = product['images'];
+            List<Map<String, dynamic>> images = tempImages
+                .map((image) => image as Map<String, dynamic>)
+                .toList();
+            product['images'] = images;
+            return product;
+          }).toList();
 
-          for (Map<String, dynamic> product in productsTemp) {
-            String categoryName = await fifthQueryTable
-                .select()
-                .eq(
-                  'id',
-                  product['category_id'],
-                )
-                .single();
+          Logger().wtf(products);
 
-            product['category'] = categoryName;
-
-            Map<String, dynamic> shop = await subQueryTable
-                .select()
-                .eq('user_id', product['shop_id'])
-                .single();
-
-            Map<String, dynamic> image =
-                await thirdQueryTable.select().eq('product_id', product['id']);
-            imageList.add(image);
-
-            String area = await fourthQueryTable
-                .select()
-                .eq('id', shop['service_area_id'])
-                .single();
-
-            shop['service_area'] = area;
-
-            Map<String, dynamic> temp = {
-              'product': product,
-              'shop': shop,
-              'images': imageList,
-            };
-
-            products.add(temp);
-          }
-
-          emit(ProductSuccessState(
-            products: products,
-          ));
+          emit(
+            ProductSuccessState(
+              products: products,
+            ),
+          );
         } else if (event is ChangeProductStatusEvent) {
           await queryTable.update({
             'status': event.status,

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:prodel_admin/blocs/sign_in/sign_in_bloc.dart';
-import 'package:prodel_admin/ui/screens/dashboard_screen.dart';
 import 'package:prodel_admin/ui/screens/home_screen.dart';
+import 'package:prodel_admin/ui/widgets/change_password_dialog.dart';
+import 'package:prodel_admin/ui/widgets/custom_action_button.dart';
 import 'package:prodel_admin/ui/widgets/custom_alert_dialog.dart';
 import 'package:prodel_admin/ui/widgets/custom_button.dart';
 import 'package:prodel_admin/ui/widgets/custom_input_form_field.dart';
@@ -162,6 +163,19 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         label: 'Login',
                         isLoading: state is SignInLoadingState,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      CustomActionButton(
+                        color: Colors.purple,
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => const ChangePasswordDialog(),
+                          );
+                        },
+                        label: 'Change Password',
                       ),
                     ],
                   ),

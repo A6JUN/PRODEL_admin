@@ -70,7 +70,7 @@ class ShowShopDialog extends StatelessWidget {
               const Divider(),
               LabelWithText(
                 label: 'Address',
-                text: shopDetails['address_line'],
+                text: shopDetails['address']['address_line'],
               ),
               const SizedBox(
                 height: 10,
@@ -81,14 +81,14 @@ class ShowShopDialog extends StatelessWidget {
                   Expanded(
                     child: LabelWithText(
                       label: 'Place',
-                      text: shopDetails['place'],
+                      text: shopDetails['address']['place'],
                     ),
                   ),
                   Expanded(
                     child: LabelWithText(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       label: 'City',
-                      text: shopDetails['city'],
+                      text: shopDetails['address']['city'],
                     ),
                   ),
                 ],
@@ -102,14 +102,14 @@ class ShowShopDialog extends StatelessWidget {
                   Expanded(
                     child: LabelWithText(
                       label: 'Service Area',
-                      text: shopDetails['service_area'],
+                      text: shopDetails['address']['service_area']['name'],
                     ),
                   ),
                   Expanded(
                     child: LabelWithText(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       label: 'Pin',
-                      text: shopDetails['pin'].toString(),
+                      text: shopDetails['address']['pin'].toString(),
                     ),
                   ),
                 ],
