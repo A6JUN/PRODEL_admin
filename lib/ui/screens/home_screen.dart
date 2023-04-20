@@ -10,6 +10,7 @@ import 'package:prodel_admin/ui/screens/product_screen.dart';
 import 'package:prodel_admin/ui/screens/service_area_screen.dart';
 import 'package:prodel_admin/ui/screens/shops_screen.dart';
 import 'package:prodel_admin/ui/screens/suggestion_screen.dart';
+import 'package:prodel_admin/ui/widgets/change_password_dialog.dart';
 import 'package:prodel_admin/ui/widgets/custom_alert_dialog.dart';
 import 'package:prodel_admin/values/colors.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -235,6 +236,22 @@ class _HomescreenState extends State<Homescreen>
                   controller!.animateTo(8);
                   setState(() {});
                   Navigator.pop(context);
+                },
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: DashboardItem(
+                icon: Icons.lock_open_outlined,
+                label: 'Change Password',
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => const ChangePasswordDialog(),
+                  );
                 },
               ),
             ),
