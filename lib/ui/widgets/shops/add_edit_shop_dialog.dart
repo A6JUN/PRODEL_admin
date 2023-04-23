@@ -1,6 +1,8 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prodel_admin/blocs/shop/shop_bloc.dart';
+import 'package:prodel_admin/ui/widgets/custom_action_button.dart';
 import 'package:prodel_admin/ui/widgets/custom_alert_dialog.dart';
 import 'package:prodel_admin/ui/widgets/service_area_selector.dart';
 import 'package:prodel_admin/values/colors.dart';
@@ -27,6 +29,8 @@ class _AddEditShopDialogState extends State<AddEditShopDialog> {
   final TextEditingController _pinController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  PlatformFile? image;
 
   int? serviceAreaId;
   bool isObscure = true;
@@ -216,6 +220,7 @@ class _AddEditShopDialogState extends State<AddEditShopDialog> {
                 ),
                 const SizedBox(height: 5),
                 TextFormField(
+                  obscureText: isObscure,
                   controller: _passwordController,
                   validator: (value) {
                     return null;
@@ -396,6 +401,22 @@ class _AddEditShopDialogState extends State<AddEditShopDialog> {
                 const SizedBox(
                   height: 20,
                 ),
+                CustomActionButton(
+                  onPressed: () async {
+                    FilePickerResult? result =
+                        await FilePicker.platform.pickFiles();
+                    if (result != null) {
+                      image = result.files.first;
+                      setState(() {});
+                    }
+                  },
+                  label: image != null ? 'Image Selected' : 'Select Image',
+                  iconData: image != null ? Icons.done : Icons.image,
+                  color: image != null ? Colors.green : Colors.blue,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 CustomButton(
                   label: widget.shopDetails != null ? 'Save' : 'Add',
                   onTap: () {
@@ -404,32 +425,48 @@ class _AddEditShopDialogState extends State<AddEditShopDialog> {
                         if (widget.shopDetails != null) {
                           BlocProvider.of<ShopBloc>(context).add(
                             EditShopEvent(
-                              userId: widget.shopDetails!['user_id'],
+                              userId: widget.shopDetails!['shop']['user_id'],
                               name: _nameController.text.trim(),
                               address: _addressController.text.trim(),
                               city: _cityController.text.trim(),
                               email: _emailController.text.trim(),
-                              password: _passwordController.text.trim(),
+                              password:
+                                  _passwordController.text.trim().isNotEmpty
+                                      ? _passwordController.text.trim()
+                                      : null,
                               pin: int.parse(
                                   _pinController.text.trim().toString()),
                               place: _placeController.text.trim(),
                               serviceAreaId: serviceAreaId!,
+                              image: image,
                             ),
                           );
                         } else {
-                          BlocProvider.of<ShopBloc>(context).add(
-                            AddShopEvent(
-                              name: _nameController.text.trim(),
-                              address: _addressController.text.trim(),
-                              city: _cityController.text.trim(),
-                              email: _emailController.text.trim(),
-                              password: _passwordController.text.trim(),
-                              pin: int.parse(
-                                  _pinController.text.trim().toString()),
-                              place: _placeController.text.trim(),
-                              serviceAreaId: serviceAreaId!,
-                            ),
-                          );
+                          if (image != null) {
+                            BlocProvider.of<ShopBloc>(context).add(
+                              AddShopEvent(
+                                name: _nameController.text.trim(),
+                                address: _addressController.text.trim(),
+                                city: _cityController.text.trim(),
+                                email: _emailController.text.trim(),
+                                password: _passwordController.text.trim(),
+                                pin: int.parse(
+                                    _pinController.text.trim().toString()),
+                                place: _placeController.text.trim(),
+                                serviceAreaId: serviceAreaId!,
+                                image: image!,
+                              ),
+                            );
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (context) => const CustomAlertDialog(
+                                title: 'Select Image',
+                                message: 'Please select image to continue',
+                                primaryButtonLabel: 'Ok',
+                              ),
+                            );
+                          }
                         }
 
                         Navigator.pop(context);

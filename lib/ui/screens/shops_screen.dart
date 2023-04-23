@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +32,7 @@ class _ShopsScreenState extends State<ShopsScreen> {
       value: shopBloc,
       child: Center(
         child: SizedBox(
-          width: 1000,
+          width: 1200,
           child: BlocConsumer<ShopBloc, ShopState>(
             listener: (context, state) {
               if (state is ShopFailureState) {
@@ -128,7 +129,20 @@ class _ShopsScreenState extends State<ShopsScreen> {
                                         ),
                                       ),
                                       DataColumn2(
-                                        size: ColumnSize.M,
+                                        size: ColumnSize.S,
+                                        label: Text(
+                                          "Image",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ),
+                                      DataColumn2(
+                                        size: ColumnSize.L,
                                         label: Text(
                                           "Name",
                                           style: Theme.of(context)
@@ -201,6 +215,15 @@ class _ShopsScreenState extends State<ShopsScreen> {
                                             Text(
                                               state.shops[index]['shop']['id']
                                                   .toString(),
+                                            ),
+                                          ),
+                                          DataCell(
+                                            CachedNetworkImage(
+                                              imageUrl: state.shops[index]
+                                                  ['shop']['image_url'],
+                                              height: 45,
+                                              width: 45,
+                                              fit: BoxFit.cover,
                                             ),
                                           ),
                                           DataCell(

@@ -6,6 +6,7 @@ abstract class ShopEvent {}
 class AddShopEvent extends ShopEvent {
   final String name, address, place, city, email, password;
   final int pin, serviceAreaId;
+  final PlatformFile image;
 
   AddShopEvent({
     required this.name,
@@ -16,6 +17,7 @@ class AddShopEvent extends ShopEvent {
     required this.serviceAreaId,
     required this.email,
     required this.password,
+    required this.image,
   });
 }
 
@@ -23,6 +25,7 @@ class EditShopEvent extends ShopEvent {
   final String name, address, place, city, email, userId;
   final String? password;
   final int pin, serviceAreaId;
+  final PlatformFile? image;
 
   EditShopEvent({
     required this.name,
@@ -31,6 +34,7 @@ class EditShopEvent extends ShopEvent {
     required this.city,
     required this.email,
     this.password,
+    this.image,
     required this.pin,
     required this.serviceAreaId,
     required this.userId,

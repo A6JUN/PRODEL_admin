@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:prodel_admin/util/iterable_extension.dart';
@@ -65,6 +66,14 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
               emailConfirm: true,
             ),
           );
+
+          String path = await supabaseClient.storage.from('docs').uploadBinary(
+                'shops/${DateTime.now().millisecondsSinceEpoch.toString()}${event.image.name}',
+                event.image.bytes!,
+              );
+
+          path = path.replaceRange(0, 5, '');
+
           if (userDetails.user != null) {
             await queryTable.insert({
               'user_id': userDetails.user!.id,
@@ -74,6 +83,8 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
               'city': event.city,
               'pin': event.pin,
               'service_area_id': event.serviceAreaId,
+              'image_url':
+                  supabaseClient.storage.from('docs').getPublicUrl(path),
             });
             add(GetAllShopEvent());
           } else {
@@ -92,15 +103,30 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
             event.userId,
             attributes: attributes,
           );
+
+          Map<String, dynamic> shopDetails = {
+            'name': event.name,
+            'address_line': event.address,
+            'place': event.place,
+            'city': event.city,
+            'pin': event.pin,
+            'service_area_id': event.serviceAreaId,
+          };
+
+          if (event.image != null) {
+            String path =
+                await supabaseClient.storage.from('docs').uploadBinary(
+                      'shops/${DateTime.now().millisecondsSinceEpoch.toString()}${event.image!.name}',
+                      event.image!.bytes!,
+                    );
+
+            path = path.replaceRange(0, 5, '');
+            shopDetails['image_url'] =
+                supabaseClient.storage.from('docs').getPublicUrl(path);
+          }
+
           if (userDetails.user != null) {
-            await queryTable.update({
-              'name': event.name,
-              'address_line': event.address,
-              'place': event.place,
-              'city': event.city,
-              'pin': event.pin,
-              'service_area_id': event.serviceAreaId,
-            }).eq('user_id', event.userId);
+            await queryTable.update(shopDetails).eq('user_id', event.userId);
             add(GetAllShopEvent());
           } else {
             emit(ShopFailureState());

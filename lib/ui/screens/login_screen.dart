@@ -164,19 +164,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         label: 'Login',
                         isLoading: state is SignInLoadingState,
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      CustomActionButton(
-                        color: Colors.purple,
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => const ChangePasswordDialog(),
-                          );
-                        },
-                        label: 'Change Password',
-                      ),
                     ],
                   ),
                 ),
