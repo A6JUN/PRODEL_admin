@@ -126,32 +126,6 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                                               ),
                                         ),
                                       ),
-                                      DataColumn2(
-                                        size: ColumnSize.S,
-                                        label: Text(
-                                          "Status",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium!
-                                              .copyWith(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                        ),
-                                      ),
-                                      DataColumn2(
-                                        size: ColumnSize.L,
-                                        label: Text(
-                                          "Actions",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium!
-                                              .copyWith(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                        ),
-                                      ),
                                     ],
                                     rows: List<DataRow>.generate(
                                       state.suggestions.length,
@@ -167,7 +141,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                                           DataCell(
                                             Text(
                                               state.suggestions[index]
-                                                  ['suggestion']['complaint'],
+                                                  ['suggestion']['feedback'],
                                             ),
                                           ),
                                           DataCell(
@@ -181,39 +155,6 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                                               state.suggestions[index]
                                                   ['profile']['phone'],
                                             ),
-                                          ),
-                                          DataCell(
-                                            Text(
-                                              state.suggestions[index]
-                                                  ['suggestion']['status'],
-                                            ),
-                                          ),
-                                          DataCell(
-                                            state.suggestions[index]
-                                                            ['suggestion']
-                                                        ['status'] ==
-                                                    'pending'
-                                                ? CustomActionButton(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    onPressed: () {
-                                                      suggestionsBloc.add(
-                                                        ChangeSuggestionStatusEvent(
-                                                          suggestionId:
-                                                              state.suggestions[
-                                                                          index]
-                                                                      [
-                                                                      'suggestion']
-                                                                  ['id'],
-                                                        ),
-                                                      );
-                                                    },
-                                                    color: Colors.blue[900]!,
-                                                    iconData:
-                                                        Icons.done_all_outlined,
-                                                    label: 'Completed',
-                                                  )
-                                                : const SizedBox(),
                                           ),
                                         ],
                                       ),

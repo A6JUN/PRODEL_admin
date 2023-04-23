@@ -126,32 +126,6 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
                                               ),
                                         ),
                                       ),
-                                      DataColumn2(
-                                        size: ColumnSize.S,
-                                        label: Text(
-                                          "Status",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium!
-                                              .copyWith(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                        ),
-                                      ),
-                                      DataColumn2(
-                                        size: ColumnSize.L,
-                                        label: Text(
-                                          "Actions",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium!
-                                              .copyWith(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                        ),
-                                      ),
                                     ],
                                     rows: List<DataRow>.generate(
                                       state.complaints.length,
@@ -181,38 +155,6 @@ class _ComplaintsScreenState extends State<ComplaintsScreen> {
                                               state.complaints[index]['profile']
                                                   ['phone'],
                                             ),
-                                          ),
-                                          DataCell(
-                                            Text(
-                                              state.complaints[index]
-                                                  ['complaint']['status'],
-                                            ),
-                                          ),
-                                          DataCell(
-                                            state.complaints[index]['complaint']
-                                                        ['status'] ==
-                                                    'pending'
-                                                ? CustomActionButton(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    onPressed: () {
-                                                      complaintsBloc.add(
-                                                        ChangeComplaintStatusEvent(
-                                                          complaintId:
-                                                              state.complaints[
-                                                                          index]
-                                                                      [
-                                                                      'complaint']
-                                                                  ['id'],
-                                                        ),
-                                                      );
-                                                    },
-                                                    color: Colors.blue[900]!,
-                                                    iconData:
-                                                        Icons.done_all_outlined,
-                                                    label: 'Completed',
-                                                  )
-                                                : const SizedBox(),
                                           ),
                                         ],
                                       ),
