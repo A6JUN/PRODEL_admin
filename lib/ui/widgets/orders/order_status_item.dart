@@ -7,7 +7,7 @@ class OrderStatusItem extends StatelessWidget {
   final bool isSelected;
   final IconData iconData;
   final Function() onTap;
-  final OrderStatus? orderStatus;
+  final String? orderStatus;
   const OrderStatusItem({
     super.key,
     required this.label,
@@ -21,27 +21,27 @@ class OrderStatusItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       borderRadius: BorderRadius.circular(20),
-      color: orderStatus == OrderStatus.pending
+      color: orderStatus == 'pending'
           ? Colors.yellow[800]!.withOpacity(0.2)
-          : orderStatus == OrderStatus.packed
+          : orderStatus == 'packed'
               ? Colors.blue[700]!.withOpacity(0.2)
-              : orderStatus == OrderStatus.complete
+              : orderStatus == 'complete'
                   ? Colors.green.withOpacity(0.2)
                   : Colors.grey.withOpacity(0.2),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
-        hoverColor: orderStatus == OrderStatus.pending
+        hoverColor: orderStatus == 'pending'
             ? Colors.yellowAccent[100]
-            : orderStatus == OrderStatus.packed
+            : orderStatus == 'packed'
                 ? Colors.blue[100]
-                : orderStatus == OrderStatus.complete
+                : orderStatus == 'complete'
                     ? Colors.green[100]
                     : Colors.grey[100],
-        splashColor: orderStatus == OrderStatus.pending
+        splashColor: orderStatus == 'pending'
             ? Colors.yellow[200]
-            : orderStatus == OrderStatus.packed
+            : orderStatus == 'packed'
                 ? Colors.blue[200]
-                : orderStatus == OrderStatus.complete
+                : orderStatus == 'complete'
                     ? Colors.green[200]
                     : Colors.grey[200],
         onTap: onTap,
@@ -67,11 +67,11 @@ class OrderStatusItem extends StatelessWidget {
               Icon(
                 iconData,
                 color: isSelected
-                    ? orderStatus == OrderStatus.pending
+                    ? orderStatus == 'pending'
                         ? Colors.yellow[800]
-                        : orderStatus == OrderStatus.packed
+                        : orderStatus == 'packed'
                             ? Colors.blue[700]
-                            : orderStatus == OrderStatus.complete
+                            : orderStatus == 'complete'
                                 ? Colors.green
                                 : Colors.grey[700]
                     : Colors.grey[400],
